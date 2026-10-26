@@ -92,101 +92,111 @@
       }
     </script>
     <style>
+      * {
+        box-sizing: border-box;
+      }
+
       body {
         font-family: Arial, sans-serif;
-        background-color: #fffcfc;
+        background-color: #0b1f3a;
         margin: 0;
-
+        padding: 30px 15px;
         display: flex;
         justify-content: center;
-
-        min-height: 100vh;
-      }
-      #RP_btn {
-        margin-top: 15px;
-        padding: 10px 15px;
-        background-color: #fadebf;
-        color: rgb(0, 0, 0);
-        border: 1px solid #bbb;
-        border-radius: 6px;
-        cursor: pointer;
-        display: flex;
-        justify-content: right;
-        align-items: right;
-        width: 350px;
       }
 
-      #NG_btn,
-      #PG_btn,
-      #NH_btn,
-      #PH_btn {
-        margin-top: 15px;
-        padding: 10px 15px;
-        background-color: #fadebf;
-        color: rgb(0, 0, 0);
-        border: 1px solid #bbb;
-        border-radius: 6px;
-        cursor: pointer;
-        width: 350px;
+      #Main {
+        width: 100%;
+        max-width: 600px;
       }
 
-      #HT_name,
-      #AT_name,
-      #H_playbacks {
-        width: 100%;
-        box-sizing: border-box;
-        padding: 9px;
-        border: 1px solid #bbb;
-        border-radius: 6px;
-        font-size: 14px;
-        background-color: #cdedff;
+      /* Page title */
+      #Main::before {
+        content: "\26BE MLB Highlight Forum";
+        display: block;
+        text-align: center;
+        color: white;
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 20px;
       }
-      .combobox {
-        display: flex;
-        box-sizing: border-box;
-        padding: 9px;
-        border-radius: 6px;
-        font-size: 14px;
-        background-color: #d5ffcd;
-        width: 100%;
-      }
-      #Section1 {
-        width: 100%;
+
+      /* White cards */
+      #Section1,
+      #HighlightForm {
+        background-color: white;
         padding: 20px;
-        background-color: #f0f0f0;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        border: 1px solid #bbb;
-      }
-      #UserInfoForm {
-        width: 100%;
-        box-sizing: border-box;
-        padding: 5px;
-        border-radius: 6px;
-      }
-
-      #TeamInfoForm {
-        width: 100%;
-        box-sizing: border-box;
-        padding: 9px;
-        border-radius: 6px;
-        margin-bottom: 5px;
-        margin-top: 10px;
+        border-radius: 12px;
+        border-top: 6px solid #c8102e;
       }
 
       #HighlightForm {
-        margin-top: 15px;
-        width: 100%;
-        box-sizing: border-box;
-        padding: 9px;
-        background-color: #ffffff;
+        margin-top: 20px;
+        border-top-color: #16365f;
+      }
+
+      br {
+        display: none;
       }
 
       label {
         display: block;
         font-weight: bold;
-        margin-bottom: 5px;
-        margin-top: 10px;
+        font-size: 13px;
+        color: #6b7a8c;
+        margin: 12px 0 5px;
+      }
+
+      /* Text boxes */
+      input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        font-size: 15px;
+        background-color: #eef5ff;
+        border: 2px solid #d6dde6;
+        border-radius: 8px;
+      }
+
+      input[type="text"]:focus {
+        outline: none;
+        border-color: #16365f;
+      }
+
+      /* Buttons (Previous and Next sit side by side) */
+      input[type="button"] {
+        width: 49%;
+        margin-top: 15px;
+        padding: 12px;
+        font-weight: bold;
+        color: #0b1f3a;
+        background-color: #eef2f7;
+        border: 2px solid #d6dde6;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+
+      input[type="button"]:hover {
+        background-color: #dde5ee;
+      }
+
+      /* Retrieve button is red, Run Playback button is green */
+      #RP_btn {
+        width: 100%;
+        color: white;
+        background-color: #c8102e;
+        border-color: #c8102e;
+      }
+
+      #HighlightForm #RP_btn {
+        background-color: #1f8a4c;
+        border-color: #1f8a4c;
+      }
+
+      /* Status messages */
+      #Msg,
+      #Msg2 {
+        text-align: center;
+        font-weight: normal;
       }
     </style>
   </head>
