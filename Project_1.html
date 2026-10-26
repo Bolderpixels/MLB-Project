@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Project1</title>
+		<script>
+		const ISOK = 200;
+			var request = new XMLHttpRequest();
+			
+			function retrieveMLBData(url) {
+				request.onload = function() {
+					if (request.status === ISOK) {
+						document.getElementById("Msg").innerHTML = request.responseText;
+						var jsObject = JSON.parse(request.responseText);
+					}
+				}
+				
+				request.open("GET", url, true);
+				request.send();
+			}
+			
+			
+
+
+
+
+			function startMeUp() {
+				document.getElementById("Msg").innerHTML = "";
+			}
+
+			function nextGame() {
+				document.getElementById("Msg").innerHTML = "Next game for this date";
+			}
+
+			function previousGame() {
+				document.getElementById("Msg").innerHTML = "Previous game for this date";
+			}
+
+			function nextHighlight() {
+				document.getElementById("Msg2").innerHTML = "Next highlight for this date";
+			}
+
+			function previousHighlight() {
+				document.getElementById("Msg2").innerHTML = "Previous highlight for this date";
+			}
+
+			function retrieveData() {
+				document.getElementById("Msg2").innerHTML = "Running playback for this date";
+				let year = document.getElementById("year").value;
+				let month = document.getElementById("Month").value;
+				let day = document.getElementById("Day").value;
+
+
+				var url = "http://statsapi.mlb.com/api/v1/schedule/games/?sportId=1&startDate=" + year + "-" + month + "-" + day + "&endDate=" + year + "-" + month + "-" + day;
+				
+				retrieveMLBData(url);
+			}
+		</script>
+<style>
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fffcfc;
+    margin: 0;
+
+    display: flex;
+    justify-content: center;
+    
+
+    min-height: 100vh;
+}
+#RP_btn {
+    margin-top: 15px;
+    padding: 10px 15px;
+    background-color: #fadebf;
+    color: rgb(0, 0, 0);
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    cursor: pointer;
+	display:flex;
+	justify-content: right;
+	align-items: right;
+	width: 350px;
+}
+
+#NG_btn,
+#PG_btn,
+#NH_btn,
+#PH_btn {
+    margin-top: 15px;
+    padding: 10px 15px;
+    background-color: #fadebf;
+    color: rgb(0, 0, 0);
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    cursor: pointer;
+	width: 350px;
+}
+
+#HT_name,
+#AT_name,
+#H_playbacks {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 9px;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    font-size: 14px;
+	background-color: #cdedff;
+}
+.combobox {
+    display: flex;
+    box-sizing: border-box;
+    padding: 9px;  
+    border-radius: 6px;
+    font-size: 14px;
+	background-color: #d5ffcd;
+	width: 100%;
+}
+#Section1 {
+	width: 100%;
+	padding: 20px;
+	background-color: #f0f0f0;
+	border-radius: 8px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	border: 1px solid #bbb;
+}
+#UserInfoForm {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px;
+    border-radius: 6px;
+	
+}
+
+#TeamInfoForm {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 9px;
+    border-radius: 6px;
+	margin-bottom: 5px;
+    margin-top: 10px;
+}
+
+#HighlightForm {
+	margin-top: 15px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 9px;
+	background-color: #ffffff;
+}
+
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    margin-top: 10px;
+}
+
+</style>
+
+	</head>
+
+	<body onload="startMeUp();">
+
+		<div id="Main">
+			<div id="Section1">
+
+				
+				<form id="UserInfoForm">
+						<label for="From/To Date">From / To Date</label> <br>
+						<label for="year">Year</label>
+					<input placeholder="use combo box here" class="combobox" id="year" type="text"><br>
+					<label for="Month">Month</label>
+					<input placeholder="use combo box here" class="combobox" id="Month" type="text"><br>
+					<label for="Day">Day</label>
+					<input placeholder="use combo box here" class="combobox" id="Day" type="text"><br>
+				</form>
+						<input value="Retrieve MLB Data for this Date" id="RP_btn" type="button" onclick="retrieveData();"><br>
+
+				<form id="TeamInfoForm">
+					<label for="HT_name">Home Team Name</label>
+					<input placeholder="Use text box or div" id="HT_name" type="text"><br>
+
+					<label for="AT_name">Away Team Name</label>
+					<input placeholder="Use text box or div" id="AT_name" type="text"><br>
+
+					<input value="Next Game for this date" id="NG_btn" type="button" onclick="nextGame();">
+					<input value="Previous Game for this date" id="PG_btn" type="button" onclick="previousGame();"><br>
+				</form>
+			</div>
+
+				<form id="HighlightForm">
+					<label for="H_playbacks">Highlight Playbacks</label>
+					<input placeholder="Use text box or div" id="H_playbacks" type="text"><br>
+
+					<input value="Next Highlight for this date" id="NH_btn" type="button" onclick="nextHighlight();">
+					<input value="Previous Highlight for this date" id="PH_btn" type="button" onclick="previousHighlight();"><br>
+					<input value="Run Playback for this date" id="RP_btn" type="button" onclick="runPlayback();"><br>
+
+					<label id="Msg"> </label><br>
+					<label id="Msg2"> </label><br>
+				</form>
+
+			
+		</div>
+
+	</body>
+</html>
