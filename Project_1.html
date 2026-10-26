@@ -66,6 +66,15 @@
 
         await retrieveMLBData(url);
         console.log(jsObject.dates);
+        let HT_name = document.getElementById("HT_name");
+        let AT_name = document.getElementById("AT_name");
+
+        jsObject.dates.forEach((x) => {
+          x.games.forEach((y) => {
+            HT_name.value = y.teams.home.team.name;
+            AT_name.value = y.teams.away.team.name;
+          });
+        });
       }
     </script>
     <style>
