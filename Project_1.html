@@ -9,6 +9,7 @@
       var jsObjectGame = "";
       var jsObjectHighlight = "";
       var gameIndex = 0;
+      var highlightIndex = 0;
       async function retrieveMLBData(url, type) {
         return new Promise((resolve) => {
           request.onload = () => {
@@ -30,9 +31,9 @@
         document.getElementById("Msg").innerHTML = "";
       }
 
-      // Show the home and away team names for the game at gameIndex. After the
-      // names are filled in, it also asks the MLB site for that game's highlights
-      // using the game's gamePk, so the highlights match the game on screen
+      // Fills in the home and away team names for the game we're on (gameIndex).
+      // Once the names are in, it grabs that game's highlights using the gamePk,
+      // so the highlights always match the game on screen
       async function showGame() {
         let games = jsObjectGame.dates[0].games;
         document.getElementById("HT_name").value =
@@ -43,9 +44,9 @@
       }
 
       function nextGame() {
-        // Move forward only if there is a next game. totalGames - 1 is the index
-        // of the last game, so we stop there. If no data is loaded yet, totalGames
-        // is undefined and the check fails, so nothing happens and nothing breaks
+        // Only go forward if there's a game after this one. totalGames - 1 is
+        // the last index, so that's where we stop. If nothing is loaded yet,
+        // totalGames is undefined, the check is false and the click does nothing
         if (gameIndex < jsObjectGame.totalGames - 1) {
           gameIndex++;
           showGame();
@@ -53,23 +54,48 @@
       }
 
       function previousGame() {
-        // Move back only if there is a previous game. Index 0 is the first game,
-        // so we stop there. gameIndex also starts at 0, which means this button
-        // does nothing until a date has been retrieved and the user has moved on
+        // Only go back if we're past the first game (index 0). gameIndex starts
+        // at 0 as well, so this button does nothing until a date is loaded and
+        // Next Game has been clicked at least once
         if (gameIndex > 0) {
           gameIndex--;
           showGame();
         }
       }
 
+      // Gets the highlights list for the current game. If nothing is loaded yet,
+      // or the game has no highlights, it gives back an empty list so the code
+      // that uses it doesn't crash
+      function getHighlightItems() {
+        return jsObjectHighlight.highlights?.highlights?.items || [];
+      }
+
+  
+      function showHighlight() {
+        let items = getHighlightItems();
+        if (items.length === 0) {
+          document.getElementById("H_playbacks").value =
+            "No highlights available";
+          return;
+        }
+        document.getElementById("H_playbacks").value =
+          items[highlightIndex].headline;
+      }
+
       function nextHighlight() {
-        document.getElementById("Msg2").innerHTML =
-          "Next highlight for this date";
+        // Same idea as nextGame. The last valid index is length - 1, and if the
+        // game has no highlights the length is 0, so nothing happens
+        if (highlightIndex < getHighlightItems().length - 1) {
+          highlightIndex++;
+          showHighlight();
+        }
       }
 
       function previousHighlight() {
-        document.getElementById("Msg2").innerHTML =
-          "Previous highlight for this date";
+        if (highlightIndex > 0) {
+          highlightIndex--;
+          showHighlight();
+        }
       }
 
       async function retrieveData() {
@@ -96,10 +122,10 @@
         await retrieveMLBData(url, "G");
         console.log(jsObjectGame.dates);
 
-        // Start at the first game of the selected date. The index is reset every
-        // time new data comes in, so a new date never keeps the old position. The
-        // length check is there because a day with no games can return an empty
-        // dates array, and showGame would fail on it
+        // Start on the first game every time a new date comes in, otherwise we'd
+        // keep the position from the last date. A day with no games can come
+        // back with an empty dates array, so check the length first or showGame
+        // would crash
         gameIndex = 0;
         if (jsObjectGame.dates.length > 0) {
           showGame();
@@ -108,12 +134,12 @@
       async function getHighlight(idGame) {
         var url = "https://statsapi.mlb.com/api/v1/game/" + idGame + "/content";
         await retrieveMLBData(url, "H");
-        console.log(jsObjectHighlight.highlights.highlights);
-        jsObjectHighlight.highlights.highlights.items.forEach((element) => {
-          document.getElementById("H_playbacks").value = element.headline;
-        });
+
+        highlightIndex = 0;
+        showHighlight();
       }
     </script>
+	
     <style>
       * {
         box-sizing: border-box;
