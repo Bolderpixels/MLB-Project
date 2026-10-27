@@ -157,7 +157,7 @@
 
       #Main {
         width: 100%;
-        max-width: 460px;
+        max-width: 640px;
       }
 
       #Main::before {
@@ -186,8 +186,38 @@
         display: none;
       }
 
+      #TeamInfoForm,
+      #HighlightForm {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+
+      #PG_btn,
+      #PH_btn {
+        order: 1;
+      }
+
+      #NG_btn,
+      #NH_btn {
+        order: 2;
+      }
+
+      #HighlightForm #RP_btn {
+        order: 3;
+      }
+
+      #Msg {
+        order: 4;
+      }
+
+      #Msg2 {
+        order: 5;
+      }
+
       label {
         display: block;
+        width: 100%;
         font-size: 13px;
         color: #6b6f85;
         margin: 14px 0 6px 4px;
@@ -215,11 +245,11 @@
       }
 
       input[type="button"] {
-        width: 100%;
+        width: 49%;
         margin-top: 14px;
-        padding: 14px;
+        padding: 14px 6px;
         font-family: inherit;
-        font-size: 14px;
+        font-size: 13px;
         color: #e8590c;
         background-color: #fcfcfc;
         border: 1px dashed #d0d0d4;
