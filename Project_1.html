@@ -6,13 +6,18 @@
     <script>
       const ISOK = 200;
       var request = new XMLHttpRequest();
-      var jsObject = "";
+      var jsObjectGame = "";
+      var jsObjectHighlight = "";
       var gameIndex = 0;
-      async function retrieveMLBData(url) {
+      async function retrieveMLBData(url, type) {
         return new Promise((resolve) => {
           request.onload = () => {
             if (request.status === ISOK) {
-              jsObject = JSON.parse(request.responseText);
+              if (type === "G") {
+                jsObjectGame = JSON.parse(request.responseText);
+              } else {
+                jsObjectHighlight = JSON.parse(request.responseText);
+              }
               resolve();
             }
           };
@@ -26,17 +31,18 @@
       }
 
       // Show the home and away team names for the game at gameIndex
-      function showGame() {
-        let games = jsObject.dates[0].games;
+      async function showGame() {
+        let games = jsObjectGame.dates[0].games;
         document.getElementById("HT_name").value =
           games[gameIndex].teams.home.team.name;
         document.getElementById("AT_name").value =
           games[gameIndex].teams.away.team.name;
+        await getHighlight(games[gameIndex].gamePk);
       }
 
       function nextGame() {
         // Move forward only if there is a next game
-        if (gameIndex < jsObject.totalGames - 1) {
+        if (gameIndex < jsObjectGame.totalGames - 1) {
           gameIndex++;
           showGame();
         }
@@ -81,14 +87,22 @@
           "-" +
           day;
 
-        await retrieveMLBData(url);
-        console.log(jsObject.dates);
+        await retrieveMLBData(url, "G");
+        console.log(jsObjectGame.dates);
 
         // Start at the first game of the selected date
         gameIndex = 0;
-        if (jsObject.dates.length > 0) {
+        if (jsObjectGame.dates.length > 0) {
           showGame();
         }
+      }
+      async function getHighlight(idGame) {
+        var url = "https://statsapi.mlb.com/api/v1/game/" + idGame + "/content";
+        await retrieveMLBData(url, "H");
+        console.log(jsObjectHighlight.highlights.highlights);
+        jsObjectHighlight.highlights.highlights.items.forEach((element) => {
+          document.getElementById("H_playbacks").value = element.headline;
+        });
       }
     </script>
     <style>
