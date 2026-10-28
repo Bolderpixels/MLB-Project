@@ -10,6 +10,7 @@
       var jsObjectHighlight = "";
       var gameIndex = 0;
       var highlightIndex = 0;
+      var itemsUrlsVideos = [];
       async function retrieveMLBData(url, type) {
         return new Promise((resolve) => {
           request.onload = () => {
@@ -27,9 +28,9 @@
         });
       }
 
-      function startMeUp() {
-        document.getElementById("Msg").innerHTML = "";
-      }
+      // function startMeUp() {
+      //   document.getElementById("Msg").innerHTML = "";
+      // }
 
       // Fills in the home and away team names for the game we're on (gameIndex).
       // Once the names are in, it grabs that game's highlights using the gamePk,
@@ -70,9 +71,9 @@
         return jsObjectHighlight.highlights?.highlights?.items || [];
       }
 
-  
       function showHighlight() {
         let items = getHighlightItems();
+
         if (items.length === 0) {
           document.getElementById("H_playbacks").value =
             "No highlights available";
@@ -120,8 +121,6 @@
           day;
 
         await retrieveMLBData(url, "G");
-        console.log(jsObjectGame.dates);
-
         // Start on the first game every time a new date comes in, otherwise we'd
         // keep the position from the last date. A day with no games can come
         // back with an empty dates array, so check the length first or showGame
@@ -137,6 +136,23 @@
 
         highlightIndex = 0;
         showHighlight();
+        itemsUrlsVideos = getHighlightItems()
+          .filter((x) => x.playbacks[0].name === "mp4Avc")
+          .map((x) => x.playbacks[0].url);
+        console.log(itemsUrlsVideos);
+      }
+      function runPlayback() {
+        var newWin = {};
+        itemsUrlsVideos.forEach((x, index) => {
+          if (index === 0) {
+            newWin = window.open(x, "_blank");
+          } else {
+            newWin.location.href = x;
+          }
+          if (newWin) {
+            newWin.focus();
+          }
+        });
       }
     </script>
 
@@ -283,7 +299,7 @@
     </style>
   </head>
 
-  <body onload="startMeUp()">
+  <body>
     <div id="Main">
       <div id="Section1">
         <form id="UserInfoForm">
